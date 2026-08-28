@@ -1,0 +1,309 @@
+/* CSS STYLESHEET - BMW LUXURY WEBSITE */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap');
+
+/* Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #08080c;
+    color: #f3f4f6;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #08080c;
+}
+::-webkit-scrollbar-thumb {
+    background: #2a2a35;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #d4af37;
+}
+
+/* Glassmorphism & Cards */
+.glass-header {
+    background: rgba(8, 8, 12, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+    background: rgba(18, 18, 26, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Luxury Color Gradients & Text */
+.gold-gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, #d4af37 50%, #aa7c11 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn-gold-glow {
+    background: linear-gradient(135deg, #f59e0b 0%, #d4af37 100%);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+    transition: all 0.3s ease;
+}
+.btn-gold-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+}
+
+.btn-white-luxury {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+.btn-white-luxury:hover {
+    background-color: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Form inputs */
+.form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+.form-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Navigation link hover effect */
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #d4af37;
+    transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* ============================================================ */
+/* SIDE NAVBAR BÊN TRÁI - xuất hiện khi lướt xuống dưới header   */
+/* ============================================================ */
+.side-navbar {
+    position: fixed;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-140%);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    background: rgba(18, 18, 26, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+}
+
+.side-navbar.visible {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (min-width: 768px) {
+    .side-navbar {
+        display: flex;
+    }
+}
+
+.side-nav-item {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #9ca3af;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.side-nav-item:hover,
+.side-nav-item:focus-visible {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+.side-nav-item.active {
+    color: #000000;
+    background: linear-gradient(135deg, #f59e0b 0%, #d4af37 100%);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.45);
+}
+
+.side-nav-tooltip {
+    position: absolute;
+    left: calc(100% + 14px);
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 10px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #d4af37;
+    background: rgba(8, 8, 12, 0.92);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.side-nav-item:hover .side-nav-tooltip,
+.side-nav-item:focus-visible .side-nav-tooltip {
+    opacity: 1;
+}
+
+/* ============================================================ */
+/* NÚT HAMBURGER (MOBILE)                                        */
+/* ============================================================ */
+.hamburger-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background-color: #f3f4f6;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+
+#hamburger-btn:hover .hamburger-bar,
+#hamburger-btn:focus-visible .hamburger-bar {
+    background-color: #d4af37;
+}
+
+#hamburger-btn:focus-visible {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+}
+
+#hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+#hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+#hamburger-btn[aria-expanded="true"] .hamburger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+#hamburger-btn {
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+#hamburger-btn:hover,
+#hamburger-btn:focus-visible {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+}
+
+/* ============================================================ */
+/* MOBILE MENU OVERLAY                                           */
+/* ============================================================ */
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    /* Dưới header (z-50) để nút hamburger luôn bấm được khi menu mở,
+       nhưng trên toàn bộ nội dung trang và side navbar (z-40) */
+    z-index: 45;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-panel {
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-menu-overlay.open .menu-panel {
+    transform: translateX(0);
+}
+
+.mobile-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: 12px;
+    color: #d1d5db;
+    letter-spacing: 0.15em;
+    border: 1px solid transparent;
+    transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.mobile-menu-link:hover,
+.mobile-menu-link:focus-visible,
+.mobile-menu-link.current {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+    outline: none;
+}
+
+.mobile-menu-link:focus-visible {
+    border-color: #d4af37;
+}
+
+.mobile-menu-link.current {
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+body.menu-open {
+    overflow: hidden;
+}

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW Luxury Configurator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/configurator.css">
+</head>
+<body class="bg-[#08080c] text-white selection:bg-amber-500 selection:text-black antialiased">
+    
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-header px-6 py-4 flex justify-between items-center gap-4">
+        <div class="text-2xl font-bold tracking-widest uppercase text-white flex items-center gap-3 shrink-0">
+            <span class="w-8 h-8 bg-amber-400 rounded-full inline-block animate-pulse"><a href="index.html"><img src="https://imgs.search.brave.com/62RcfQnUTaFSGgbl3ilnALtd0eLR6SaXUfPeyofVEEk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzI4LzIvYm13LWZs/YXQtbG9nby1wbmdf/c2Vla2xvZ28tMjg2/OTYyLnBuZw" alt="BMW Logo"></a></span>
+            BMW <span class="text-xs tracking-widest font-light text-amber-400/80 border-l border-white/20 pl-3">LUXURY</span>
+        </div>
+        <nav class="hidden lg:flex gap-4 xl:gap-8 text-xs tracking-widest uppercase font-medium text-gray-300 whitespace-nowrap">
+            <a href="index.html#hero" class="nav-link hover:text-amber-400 transition">Tổng quan</a>
+            <a href="index.html#lineup" class="nav-link hover:text-amber-400 transition">Dòng xe</a>
+            <a href="index.html#story" class="nav-link hover:text-amber-400 transition">Chi tiết</a>
+            <a href="index.html#viewer360" class="nav-link hover:text-amber-400 transition">360° Viewer</a>
+            <a href="configurator.html" class="nav-link hover:text-amber-400 transition text-amber-400">Cấu hình</a>
+            <a href="index.html#compare" class="nav-link hover:text-amber-400 transition">So sánh</a>
+            <a href="index.html#showroom" class="nav-link hover:text-amber-400 transition">Showroom</a>
+        </nav>
+        <div class="flex items-center gap-3 shrink-0">
+            <a href="index.html#book-test-drive" class="btn-gold-glow hidden sm:block text-black font-bold px-5 xl:px-6 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shadow-lg whitespace-nowrap">
+                Đăng ký Lái Thử
+            </a>
+            <button id="hamburger-btn" type="button" class="flex flex-col justify-center items-center gap-[5px] w-11 h-11 rounded-xl glass-card shrink-0 lg:hidden" aria-label="Mở menu">
+                <span class="w-5 h-0.5 bg-white transition-all"></span>
+                <span class="w-5 h-0.5 bg-white transition-all"></span>
+                <span class="w-5 h-0.5 bg-white transition-all"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU DRAWER (Đã thay đổi nội dung thành Tóm tắt cấu hình) -->
+    <!-- MOBILE MENU DRAWER (Tối ưu UX: Header cố định - Body cuộn - Footer cố định) -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" id="mobile-menu-bg"></div>
+        
+        <!-- Khung panel chính: Bỏ overflow-y-auto tổng thể, dùng flex-col để chia 3 mảng -->
+        <div class="absolute top-0 right-0 h-full w-full max-w-[85vw] sm:max-w-sm glass-header border-l border-white/10 flex flex-col translate-x-full transition-transform duration-300" id="mobile-menu-panel">
+            
+            <!-- 1. HEADER (Luôn cố định trên cùng) -->
+            <div class="flex justify-between items-center px-6 py-5 border-b border-white/10">
+                <h3 class="text-base sm:text-lg font-bold uppercase tracking-widest gold-gradient-text m-0">Tóm Tắt Cấu Hình</h3>
+                <!-- Đưa nút tắt vào flex để căn chỉnh hoàn hảo với tiêu đề -->
+                <button id="close-menu-btn" class="p-2 -mr-2 text-gray-400 hover:text-amber-400 transition-colors">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <!-- 2. BODY (Phần cuộn độc lập chứa các option) -->
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-4 text-sm">
+                <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                    <span class="text-gray-400">Dòng xe</span>
+                    <span id="m-sum-model" class="font-bold text-white uppercase text-right">-</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                    <span class="text-gray-400">Mã xe</span>
+                    <span id="m-sum-generation" class="font-bold text-white uppercase text-right">-</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                    <span class="text-gray-400">Màu ngoại thất</span>
+                    <span id="m-sum-color" class="font-bold text-white text-right">-</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                    <span class="text-gray-400">Cá tính lái</span>
+                    <span id="m-sum-personality" class="font-bold text-white uppercase text-right">-</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                    <span class="text-gray-400">Gói Package</span>
+                    <span id="m-sum-package" class="font-bold text-white uppercase text-right">-</span>
+                </div>
+            </div>
+
+            <!-- 3. FOOTER (Luôn nổi ở dưới cùng, chứa Giá & Nút bấm) -->
+            <!-- Thêm bg-black/40 để tách biệt nhẹ phần footer với nội dung cuộn bên trên -->
+            <div class="px-6 py-6 border-t border-amber-400/30 bg-black/40 backdrop-blur-md">
+                
+                <!-- Bảng giá phụ -->
+                <div class="space-y-2 mb-4 text-sm">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Giá gốc</span>
+                        <span id="m-sum-base-price">0 VNĐ</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400">
+                        <span>Giá tùy chọn</span>
+                        <span id="m-sum-options-price">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <!-- Tổng giá -->
+                <div class="flex justify-between items-end mb-5">
+                    <span class="text-xs uppercase tracking-widest text-gray-400">Tổng giá dự kiến</span>
+                    <span id="m-sum-total-price" class="text-xl font-black gold-gradient-text text-right">0 VNĐ</span>
+                </div>
+                
+                <!-- Nút Hoàn tất (Thêm active:scale-95 để có hiệu ứng nhấn nút xịn xò trên mobile) -->
+                <button id="m-btn-finish" class="btn-gold-glow text-black font-bold w-full py-3.5 rounded-full text-sm uppercase tracking-widest active:scale-95 transition-transform">
+                    HOÀN TẤT CẤU HÌNH
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 01: HERO CONFIGURATOR -->
+    <section id="conf-hero" class="relative h-screen w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <video class="absolute top-0 left-0 w-full h-full object-cover opacity-70" autoplay loop muted playsinline>
+                <source src="https://pub-f3795acf9b6e410c8ed5b3a4ebf87360.r2.dev/vid/bmw.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#08080c]/50 via-transparent to-[#08080c]"></div>
+        </div>
+        <div class="relative z-10 hero-content">
+            <p class="text-amber-400 uppercase tracking-[0.4em] text-xs font-semibold mb-4">Crafted Around You</p>
+            <h1 class="text-4xl md:text-7xl font-black tracking-tight text-white mb-6 uppercase gold-gradient-text">
+                CONFIGURE YOUR BMW
+            </h1>
+            <p class="text-sm md:text-lg text-gray-300 font-light tracking-[0.2em] mb-12 uppercase">
+                BMW M4 • X5 • X7 • XM
+            </p>
+            <button id="btn-start-config" class="btn-gold-glow text-black font-bold px-8 py-4 rounded-full text-xs md:text-sm tracking-widest uppercase transition-all duration-300 shadow-lg">
+                BẮT ĐẦU CẤU HÌNH
+            </button>
+        </div>
+    </section>
+
+    <!-- SECTION 02: CHỌN DÒNG XE -->
+    <section id="conf-models" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10 bg-[#08080c]">
+        <div class="text-center mb-16 sec-title">
+            <h2 class="text-3xl md:text-5xl font-black uppercase tracking-widest gold-gradient-text mb-4">Choose Your BMW</h2>
+            <div class="h-[1px] w-24 bg-amber-500/50 mx-auto"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 model-grid">
+            <!-- M4 -->
+            <div class="model-card glass-card rounded-2xl overflow-hidden cursor-pointer group border border-white/5 transition-all duration-500" data-model="m4" data-price="4500000000">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="img/bmw-m4-configurator.jpg" alt="BMW M4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500"></div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold uppercase tracking-wider mb-2">BMW M4</h3>
+                    <p class="text-gray-400 text-sm tracking-widest mb-6">High Performance Coupe</p>
+                    <div class="flex justify-between text-xs tracking-widest text-gray-300">
+                        <div><span class="block text-amber-400 font-bold mb-1">510 HP</span>Công suất</div>
+                        <div><span class="block text-amber-400 font-bold mb-1">3.9s</span>0-100 km/h</div>
+                    </div>
+                </div>
+            </div>
+            <!-- X5 -->
+            <div class="model-card glass-card rounded-2xl overflow-hidden cursor-pointer group border border-white/5 transition-all duration-500" data-model="x5" data-price="4200000000">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="img/bmw-x5-configurator.jpg" alt="BMW X5" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500"></div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold uppercase tracking-wider mb-2">BMW X5</h3>
+                    <p class="text-gray-400 text-sm tracking-widest mb-6">Luxury SAV</p>
+                    <div class="flex justify-between text-xs tracking-widest text-gray-300">
+                        <div><span class="block text-amber-400 font-bold mb-1">381 HP</span>Công suất</div>
+                        <div><span class="block text-amber-400 font-bold mb-1">5.4s</span>0-100 km/h</div>
+                    </div>
+                </div>
+            </div>
+            <!-- X7 -->
+            <div class="model-card glass-card rounded-2xl overflow-hidden cursor-pointer group border border-white/5 transition-all duration-500" data-model="x7" data-price="6200000000">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="img/bmw-x7-configurator.jpg" alt="BMW X7" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500"></div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold uppercase tracking-wider mb-2">BMW X7</h3>
+                    <p class="text-gray-400 text-sm tracking-widest mb-6">Flagship SAV</p>
+                    <div class="flex justify-between text-xs tracking-widest text-gray-300">
+                        <div><span class="block text-amber-400 font-bold mb-1">381 HP</span>Công suất</div>
+                        <div><span class="block text-amber-400 font-bold mb-1">5.8s</span>0-100 km/h</div>
+                    </div>
+                </div>
+            </div>
+            <!-- XM -->
+            <div class="model-card glass-card rounded-2xl overflow-hidden cursor-pointer group border border-white/5 transition-all duration-500" data-model="xm" data-price="10999000000">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="img/bmw-xm-configurator.jpg" alt="BMW XM" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500"></div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold uppercase tracking-wider mb-2">BMW XM</h3>
+                    <p class="text-gray-400 text-sm tracking-widest mb-6">M Hybrid Power</p>
+                    <div class="flex justify-between text-xs tracking-widest text-gray-300">
+                        <div><span class="block text-amber-400 font-bold mb-1">653 HP</span>Công suất</div>
+                        <div><span class="block text-amber-400 font-bold mb-1">4.3s</span>0-100 km/h</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Configurator Layout -->
+    <div id="config-builder" class="hidden lg:flex flex-col lg:flex-row relative max-w-[100vw] mx-auto opacity-0">
+        <!-- Left Column: Steps -->
+        <div class="w-full lg:w-[70%] lg:pr-8 px-6 lg:pl-12 pb-24">
+            
+            <!-- SECTION 03: CHỌN MÃ XE -->
+            <section id="conf-generation" class="py-16 border-b border-white/10 hidden step-section">
+                <h2 class="text-2xl font-bold uppercase tracking-widest mb-8">Generation / Mã Xe</h2>
+                <div id="generation-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Tự động render bằng JS -->
+                </div>
+            </section>
+
+            <!-- SECTION 04: CHỌN MÀU NGOẠI THẤT -->
+            <section id="conf-color" class="py-16 border-b border-white/10 hidden step-section">
+                <h2 class="text-2xl font-bold uppercase tracking-widest mb-8">Exterior Colors</h2>
+                <div class="flex flex-col-reverse xl:flex-row gap-12 items-center">
+                    <!-- Danh sách màu -->
+                    <div class="w-full xl:w-1/3">
+                        <div id="color-list" class="flex flex-wrap xl:flex-col gap-4">
+                            <!-- Tự động render bằng JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Khung Slider hình ảnh màu -->
+                    <div class="w-full xl:w-2/3 h-64 md:h-96 xl:h-[500px] relative rounded-2xl overflow-hidden glass-card flex items-center justify-center p-4 group">
+                        
+                        <!-- Container trượt ngang -->
+                        <div id="color-image-slider" class="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth" style="-ms-overflow-style: none; scrollbar-width: none;">
+                            <!-- Hình ảnh sẽ được render tại đây bằng JS -->
+                        </div>
+                        
+                        <!-- Nút điều hướng Trái/Phải -->
+                        <button id="slide-left" type="button" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 border border-white/20 hover:bg-amber-400 hover:text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10">
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <button id="slide-right" type="button" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 border border-white/20 hover:bg-amber-400 hover:text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+
+                        <!-- Dấu chấm chỉ báo (dots) -->
+                        <div id="slider-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                            <!-- Dots render bằng JS -->
+                        </div>
+
+                        <!-- CSS ẩn thanh cuộn mặc định -->
+                        <style>
+                            #color-image-slider::-webkit-scrollbar { display: none; }
+                        </style>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 05: DRIVING PERSONALITY -->
+            <section id="conf-personality" class="py-16 border-b border-white/10 hidden step-section">
+                <h2 class="text-2xl font-bold uppercase tracking-widest mb-8">Driving Personality</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="personality-card glass-card p-6 rounded-xl cursor-pointer border border-white/5 hover:border-amber-400/50 transition-all group" data-personality="Comfort" data-price="0">
+                        <h4 class="text-lg font-bold text-white mb-2 uppercase">Comfort</h4>
+                        <p class="text-sm text-gray-400">Trải nghiệm êm ái, tĩnh lặng hoàn hảo cho di chuyển hàng ngày.</p>
+                    </div>
+                    <div class="personality-card glass-card p-6 rounded-xl cursor-pointer border border-white/5 hover:border-amber-400/50 transition-all group" data-personality="Executive" data-price="50000000">
+                        <h4 class="text-lg font-bold text-white mb-2 uppercase">Executive</h4>
+                        <p class="text-sm text-gray-400">Tinh chỉnh hệ thống treo khí nén tối ưu cho hành khách phía sau.</p>
+                        <p class="text-amber-400 text-xs font-bold mt-3">+50,000,000 VNĐ</p>
+                    </div>
+                    <div class="personality-card glass-card p-6 rounded-xl cursor-pointer border border-white/5 hover:border-amber-400/50 transition-all group" data-personality="Sport" data-price="120000000">
+                        <h4 class="text-lg font-bold text-white mb-2 uppercase">Sport</h4>
+                        <p class="text-sm text-gray-400">Phản hồi vô lăng nhạy bén, hệ thống xả thể thao và treo cứng cáp.</p>
+                        <p class="text-amber-400 text-xs font-bold mt-3">+120,000,000 VNĐ</p>
+                    </div>
+                    <div class="personality-card glass-card p-6 rounded-xl cursor-pointer border border-white/5 hover:border-amber-400/50 transition-all group" data-personality="Track Inspired" data-price="250000000">
+                        <h4 class="text-lg font-bold text-white mb-2 uppercase">Track Inspired</h4>
+                        <p class="text-sm text-gray-400">Hiệu năng tối đa, phanh gốm carbon và giảm trọng lượng.</p>
+                        <p class="text-amber-400 text-xs font-bold mt-3">+250,000,000 VNĐ</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 06: LIFESTYLE PACKAGE -->
+            <section id="conf-package" class="py-16 border-b border-white/10 hidden step-section">
+                <h2 class="text-2xl font-bold uppercase tracking-widest mb-8">Lifestyle Packages</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="package-card relative h-80 rounded-2xl overflow-hidden cursor-pointer group border border-white/5" data-package="Executive Package" data-price="180000000">
+                        <img src="https://imgs.search.brave.com/DUr-2h1VwHdgqNMD9PGHN1TPrWnozF0w4Pp0s5xaLsk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9kb25n/dGhhbmgtaG9hcGh1/Yy52bi93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMy8wNy94ZWRv/aXNvbmdfaGVfdGhv/bmdfYW1fdGhhbmhf/dm9tX2Jvd2Vyc193/aWxraW5zX3N1cnJv/dW5kX3NvdW5kX3N5/c3RlbV82NTV3X2Jt/d19pNV9zZWRhbl81/X3Nlcmllc18yMDIz/X2gzLTEwMjR4NjAz/LmpwZw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:via-black/80 transition-all"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h4 class="text-xl font-bold uppercase mb-2">Executive Package</h4>
+                            <ul class="text-xs text-gray-300 space-y-1 mb-4">
+                                <li>• Ghế massage chỉnh điện</li>
+                                <li>• Hệ thống âm thanh Bowers & Wilkins</li>
+                                <li>• Trần sao Sky Lounge</li>
+                            </ul>
+                            <div class="text-amber-400 font-bold">+180,000,000 VNĐ</div>
+                        </div>
+                    </div>
+                    <div class="package-card relative h-80 rounded-2xl overflow-hidden cursor-pointer group border border-white/5" data-package="Performance Package" data-price="210000000">
+                        <img src="https://imgs.search.brave.com/W7lJnWoY50l0QikmMcsiqQz2GOuL2aBGBVF-XyNsLag/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ibXd2/aWV0bmFtLmNvbS52/bi93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MS8wNy9EU0MwNDA0/My0xMDI0eDY4My0x/LmpwZw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:via-black/80 transition-all"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h4 class="text-xl font-bold uppercase mb-2">Performance Package</h4>
+                            <ul class="text-xs text-gray-300 space-y-1 mb-4">
+                                <li>• Gói M Carbon ngoại thất</li>
+                                <li>• Tăng giới hạn tốc độ tối đa</li>
+                                <li>• Hệ thống ống xả M Sport</li>
+                            </ul>
+                            <div class="text-amber-400 font-bold">+210,000,000 VNĐ</div>
+                        </div>
+                    </div>
+                    <div class="package-card relative h-80 rounded-2xl overflow-hidden cursor-pointer group border border-white/5" data-package="Family Package" data-price="150000000">
+                        <img src="https://imgs.search.brave.com/IckA4HCn7uZYuP2PbIxiv5TI-_fovNWvmiCJJklP-6Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4x/Lm90b3NhaWdvbi5j/b20vZGF0YS1yZXNp/emUvYXR0YWNobWVu/dHMvMjk2OC8yOTY4/OTIzLTVkYmNlYjQy/MTQ0Nzk2M2NiZjFk/NzQ3NzI3OWFmNzBi/LmpwZz93PTc1MA" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:via-black/80 transition-all"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h4 class="text-xl font-bold uppercase mb-2">Family Package</h4>
+                            <ul class="text-xs text-gray-300 space-y-1 mb-4">
+                                <li>• Màn hình giải trí phía sau</li>
+                                <li>• Hệ thống lọc không khí ion</li>
+                                <li>• Bàn làm việc gập</li>
+                            </ul>
+                            <div class="text-amber-400 font-bold">+150,000,000 VNĐ</div>
+                        </div>
+                    </div>
+                    <div class="package-card relative h-80 rounded-2xl overflow-hidden cursor-pointer group border border-white/5" data-package="VIP Chauffeur Package" data-price="320000000">
+                        <img src="https://imgs.search.brave.com/xU23DrpcBb_2YU9TDJ1SrN1NfoMUMz-HC8AxcrRvWQs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ndHhh/dXRvY2FyZS52bi91/cGxvYWRzL2FydGlj/bGUvZnVsbF9jby1u/ZW4tZGFuLXBoaW0t/Y2FjaC1uaGlldC1v/LXRvLWx5LWRvLWRh/bi1waGltLWNhY2gt/bmhpZXQtMTc1ODUy/OTkzNy5qcGc" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:via-black/80 transition-all"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h4 class="text-xl font-bold uppercase mb-2">VIP Chauffeur Package</h4>
+                            <ul class="text-xs text-gray-300 space-y-1 mb-4">
+                                <li>• Vách ngăn khoang hành khách</li>
+                                <li>• Kính tối màu cách âm 2 lớp</li>
+                                <li>• Hệ thống liên lạc nội bộ</li>
+                            </ul>
+                            <div class="text-amber-400 font-bold">+320,000,000 VNĐ</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 10: BMW INDIVIDUAL STUDIO -->
+            <section id="conf-individual" class="py-16 border-b border-white/10 hidden step-section">
+                <div class="glass-card p-8 rounded-2xl border border-amber-400/30 bg-gradient-to-br from-amber-500/5 to-transparent">
+                    <h2 class="text-2xl font-bold uppercase tracking-widest mb-2 gold-gradient-text">BMW Individual Studio</h2>
+                    <h3 class="text-sm tracking-[0.2em] uppercase text-gray-300 mb-6">Create Something Truly Unique</h3>
+                    <p class="text-sm text-gray-400 mb-8 max-w-2xl">Không tìm thấy màu phù hợp? Đội ngũ BMW Individual sẽ hỗ trợ phát triển màu sơn độc quyền theo yêu cầu của riêng bạn.</p>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Tên màu mong muốn</label>
+                            <input type="text" class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-amber-400 transition" placeholder="VD: Midnight Sapphire">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Mã màu HEX (Không bắt buộc)</label>
+                            <input type="text" class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-amber-400 transition" placeholder="#000000">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Mô tả ý tưởng</label>
+                            <textarea class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-amber-400 transition min-h-[100px]" placeholder="Hãy mô tả màu sắc bạn mong muốn..."></textarea>
+                        </div>
+                        <!-- SECTION 09 INCLUDED HERE AS UPLOAD INSPIRATION -->
+                        <div id="conf-upload">
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Upload Inspiration (Hình ảnh tham khảo)</label>
+                            <div class="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-amber-400 transition cursor-pointer bg-black/30" id="upload-zone">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 text-amber-400 mx-auto mb-3"></i>
+                                <p class="text-sm text-gray-300 mb-1">Drag & Drop hoặc Click để tải lên</p>
+                                <p class="text-xs text-gray-500">Hỗ trợ JPG, PNG, WEBP. Tối đa 5MB.</p>
+                            </div>
+                            <div id="upload-preview" class="mt-4 flex flex-wrap gap-4"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 italic mt-4">* Custom Paint Request may require additional production time and pricing consultation.</p>
+                        <button class="btn-gold-glow text-black font-bold px-8 py-4 rounded-xl text-xs uppercase tracking-widest transition-all w-full md:w-auto mt-4">
+                            GỬI YÊU CẦU MÀU RIÊNG
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 08: CONTACT SPECIALIST -->
+            <section id="conf-contact" class="py-16 hidden step-section mb-12">
+                <div class="glass-card p-10 rounded-2xl border border-white/10 text-center">
+                    <h2 class="text-3xl font-bold uppercase tracking-widest mb-4">Talk To A BMW Specialist</h2>
+                    <p class="text-amber-400 text-sm uppercase tracking-widest mb-6">Luxury Vehicle Advisor</p>
+                    <p class="text-gray-400 text-sm max-w-xl mx-auto mb-10">Đội ngũ chuyên gia sẽ tư vấn cấu hình phù hợp với nhu cầu sử dụng, ngân sách và phong cách cá nhân.</p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="px-8 py-3 rounded-full border border-white/20 hover:border-amber-400 hover:text-amber-400 transition uppercase tracking-widest text-xs flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i> Hotline
+                        </button>
+                        <button class="px-8 py-3 rounded-full border border-white/20 hover:border-amber-400 hover:text-amber-400 transition uppercase tracking-widest text-xs flex items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Zalo
+                        </button>
+                        <button class="px-8 py-3 rounded-full border border-white/20 hover:border-amber-400 hover:text-amber-400 transition uppercase tracking-widest text-xs flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4"></i> Email
+                        </button>
+                        <button class="btn-gold-glow text-black font-bold px-8 py-3 rounded-full uppercase tracking-widest text-xs flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> Đặt Lịch Tư Vấn
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="text-center py-8 hidden step-section">
+                <button id="btn-finish" class="btn-gold-glow text-black font-bold px-12 py-5 rounded-full text-sm uppercase tracking-widest transition-all">
+                    HOÀN TẤT CẤU HÌNH
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Right Column: SECTION 07 BUILD SUMMARY -->
+        <div class="hidden lg:block lg:w-[30%] relative">
+            <div id="summary-sidebar" class="lg:sticky lg:top-24 glass-card border border-white/10 rounded-2xl p-6 shadow-2xl">
+                <h3 class="text-xl font-bold uppercase tracking-widest border-b border-white/10 pb-4 mb-4">Build Summary</h3>
+                
+                <div class="space-y-4 mb-8 text-sm">
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-gray-400">Dòng xe</span>
+                        <span id="sum-model" class="font-bold text-white uppercase">-</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-gray-400">Mã xe</span>
+                        <span id="sum-generation" class="font-bold text-white uppercase">-</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-gray-400">Màu ngoại thất</span>
+                        <span id="sum-color" class="font-bold text-white">-</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-gray-400">Driving Personality</span>
+                        <span id="sum-personality" class="font-bold text-white uppercase">-</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <span class="text-gray-400">Package</span>
+                        <span id="sum-package" class="font-bold text-white uppercase">-</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3 mb-6 text-sm">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Giá gốc</span>
+                        <span id="sum-base-price">0 VNĐ</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400">
+                        <span>Giá tùy chọn</span>
+                        <span id="sum-options-price">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-amber-400/30">
+                    <div class="flex justify-between items-end">
+                        <span class="text-xs uppercase tracking-widest text-gray-400">Tổng giá dự kiến</span>
+                        <span id="sum-total-price" class="text-2xl font-black gold-gradient-text">0 VNĐ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 11: FINAL SHOWCASE (Hidden by default) -->
+    <section id="conf-final" class="fixed inset-0 z-[100] w-full h-full bg-black/95 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-500 overflow-y-auto">
+        <div class="absolute inset-0 z-0">
+            <!-- Fullscreen background for final showcase -->
+            <img id="final-bg" src="" alt="Final Showcase" class="w-full h-full object-cover opacity-50 blur-sm scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20"></div>
+        </div>
+        
+        <div class="relative z-10 text-center w-full max-w-4xl px-4 flex flex-col items-center">
+            <h2 class="text-5xl md:text-7xl font-black uppercase tracking-widest gold-gradient-text mb-2">YOUR BMW IS READY</h2>
+            <p class="text-gray-300 tracking-[0.2em] uppercase text-sm mb-12">Crafted Around You</p>
+            
+            <div class="w-full h-64 md:h-96 relative mb-12">
+                <img id="final-car-img" src="" alt="Your BMW" class="w-full h-full object-contain filter drop-shadow-2xl scale-110">
+            </div>
+            
+            <div class="glass-card border border-white/10 rounded-xl p-6 mb-10 w-full flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-gray-300">
+                <div><span class="text-amber-400 uppercase text-xs block mb-1">Dòng xe</span><span id="final-model" class="font-bold text-white uppercase text-base"></span></div>
+                <div><span class="text-amber-400 uppercase text-xs block mb-1">Mã xe</span><span id="final-gen" class="font-bold text-white uppercase text-base"></span></div>
+                <div><span class="text-amber-400 uppercase text-xs block mb-1">Màu sơn</span><span id="final-color" class="font-bold text-white text-base"></span></div>
+                <div><span class="text-amber-400 uppercase text-xs block mb-1">Cá tính</span><span id="final-personality" class="font-bold text-white uppercase text-base"></span></div>
+                <div><span class="text-amber-400 uppercase text-xs block mb-1">Package</span><span id="final-package" class="font-bold text-white uppercase text-base"></span></div>
+                <div class="w-full border-t border-white/10 mt-2 pt-4">
+                    <span class="text-amber-400 uppercase text-xs block mb-1">Tổng giá dự kiến</span>
+                    <span id="final-price" class="text-2xl font-black text-white"></span>
+                    
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <!-- Nút xác nhận cấu hình - Link sang phần đặt lịch lái thử -->
+                <a href="index.html#book-test-drive" class="btn-gold-glow text-black font-bold px-8 py-3 rounded-full text-xs uppercase tracking-widest transition-all text-center flex items-center">
+                    XÁC NHẬN CẤU HÌNH
+                </a>
+                <button id="btn-back-edit" class="px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 text-white transition uppercase tracking-widest text-xs">
+                    QUAY LẠI CHỈNH SỬA
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="assets/js/configurator.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+/* Configurator Specific Styles */
+body {
+    background-color: #08080c;
+    color: #ffffff;
+}
+
+.gold-gradient-text {
+    background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.btn-gold-glow {
+    background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.btn-gold-glow:hover {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Selected state for cards */
+.model-card.selected,
+.gen-card.selected,
+.personality-card.selected,
+.package-card.selected {
+    border-color: #fbbf24;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.15);
+    transform: translateY(-4px);
+}
+
+.model-card.selected::after,
+.gen-card.selected::after,
+.personality-card.selected::after,
+.package-card.selected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid #fbbf24;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Color Swatch */
+.color-swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.color-swatch.selected {
+    transform: scale(1.15);
+    border-color: #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+
+.color-swatch.selected::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 1px solid #fbbf24;
+    border-radius: 50%;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #08080c;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(251, 191, 36, 0.5);
+}
+
+#summary-sidebar {
+    transition: all 0.5s ease;
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+    #summary-sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 24px 24px 0 0;
+        z-index: 50;
+        max-height: 50vh;
+        overflow-y: auto;
+        background: rgba(8, 8, 12, 0.95);
+    }
+    
+    .configurator-wrapper {
+        padding-bottom: 40px;
+    }
+}
+

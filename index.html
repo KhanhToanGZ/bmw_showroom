@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW Luxury Experience - Porsche & Koenigsegg Inspired</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP & ScrollTrigger CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google <model-viewer> library for 3D GLTF/GLB models -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+</head>
+<body class="selection:bg-amber-500 selection:text-black">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-header px-6 py-4 flex justify-between items-center gap-4">
+        <div class="text-2xl font-bold tracking-widest uppercase text-white flex items-center gap-3 shrink-0">
+            <span class="w-8 h-8 bg-amber-400 rounded-full inline-block animate-pulse"><a href="#"><img src="https://imgs.search.brave.com/62RcfQnUTaFSGgbl3ilnALtd0eLR6SaXUfPeyofVEEk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzI4LzIvYm13LWZs/YXQtbG9nby1wbmdf/c2Vla2xvZ28tMjg2/OTYyLnBuZw"></a></span>
+            BMW <span class="text-xs tracking-widest font-light text-amber-400/80 border-l border-white/20 pl-3">LUXURY</span>
+        </div>
+        <nav class="hidden lg:flex gap-4 xl:gap-8 text-xs tracking-widest uppercase font-medium text-gray-300 whitespace-nowrap">
+            <a href="#hero" class="nav-link hover:text-amber-400 transition">Tổng quan</a>
+            <a href="#lineup" class="nav-link hover:text-amber-400 transition">Dòng xe</a>
+            <a href="#story" class="nav-link hover:text-amber-400 transition">Chi tiết</a>
+            <a href="#viewer360" class="nav-link hover:text-amber-400 transition">360° Viewer</a>
+            <a href="#configurator" class="nav-link hover:text-amber-400 transition">Cấu hình</a>
+            <a href="#compare" class="nav-link hover:text-amber-400 transition">So sánh</a>
+            <a href="#showroom" class="nav-link hover:text-amber-400 transition">Showroom</a>
+        </nav>
+        <div class="flex items-center gap-3 shrink-0">
+            <a href="#book-test-drive" class="btn-gold-glow hidden sm:block text-black font-bold px-5 xl:px-6 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shadow-lg whitespace-nowrap">
+                Đăng ký Lái Thử
+            </a>
+            <!-- Nút Hamburger - góc trên bên phải, bấm để mở/đóng menu -->
+            <button id="hamburger-btn" type="button" class="flex flex-col justify-center items-center gap-[5px] w-11 h-11 rounded-xl glass-card shrink-0" aria-label="Mở menu điều hướng" aria-haspopup="true" aria-expanded="false" aria-controls="mobile-menu" onclick="toggleMobileMenu()">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU OVERLAY (điều khiển bởi nút hamburger, đóng bằng ESC hoặc click nền) -->
+    <div id="mobile-menu" class="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Menu điều hướng">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="toggleMobileMenu(false)"></div>
+        <div class="menu-panel absolute top-0 left-0 h-full w-72 max-w-[82vw] glass-header border-r border-white/10 flex flex-col overflow-y-auto pt-20">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-white/10 shrink-0">
+                <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Menu</span>
+                <button id="close-menu-btn" type="button" aria-label="Đóng menu" onclick="toggleMobileMenu(false)" class="w-9 h-9 rounded-lg glass-card border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:border-amber-400 transition">
+                    <i data-lucide="x" class="w-5 h-5 pointer-events-none"></i>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-1 p-6 text-xs tracking-widest uppercase font-medium" aria-label="Điều hướng chính">
+                <a href="#hero" class="mobile-menu-link"><i data-lucide="home" class="w-4 h-4 text-amber-400 shrink-0"></i>Tổng quan</a>
+                <a href="#lineup" class="mobile-menu-link"><i data-lucide="car" class="w-4 h-4 text-amber-400 shrink-0"></i>Dòng xe</a>
+                <a href="#story" class="mobile-menu-link"><i data-lucide="sparkles" class="w-4 h-4 text-amber-400 shrink-0"></i>Chi tiết</a>
+                <a href="#viewer360" class="mobile-menu-link"><i data-lucide="rotate-3d" class="w-4 h-4 text-amber-400 shrink-0"></i>360° Viewer</a>
+                <a href="#compare" class="mobile-menu-link"><i data-lucide="scale" class="w-4 h-4 text-amber-400 shrink-0"></i>So sánh</a>
+                <a href="#configurator" class="mobile-menu-link"><i data-lucide="settings-2" class="w-4 h-4 text-amber-400 shrink-0"></i>Cấu hình</a>
+                <a href="#book-test-drive" class="mobile-menu-link"><i data-lucide="calendar-check" class="w-4 h-4 text-amber-400 shrink-0"></i>Lái thử</a>
+                <a href="#showroom" class="mobile-menu-link"><i data-lucide="map-pin" class="w-4 h-4 text-amber-400 shrink-0"></i>Showroom</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- SIDE NAVBAR BÊN TRÁI (tự động xuất hiện khi lướt xuống dưới phần header/hero) -->
+    <nav id="side-navbar" class="side-navbar" aria-label="Điều hướng nhanh theo mục">
+        <a href="#hero" class="side-nav-item" data-target="hero" aria-label="Tổng quan"><i data-lucide="home" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Tổng quan</span></a>
+        <a href="#lineup" class="side-nav-item" data-target="lineup" aria-label="Dòng xe"><i data-lucide="car" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Dòng xe</span></a>
+        <a href="#story" class="side-nav-item" data-target="story" aria-label="Chi tiết"><i data-lucide="sparkles" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Chi tiết</span></a>
+        <a href="#viewer360" class="side-nav-item" data-target="viewer360" aria-label="360° Viewer"><i data-lucide="rotate-3d" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">360° Viewer</span></a>
+        <a href="#compare" class="side-nav-item" data-target="compare" aria-label="So sánh"><i data-lucide="scale" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">So sánh</span></a>
+        <a href="#configurator" class="side-nav-item" data-target="configurator" aria-label="Cấu hình"><i data-lucide="settings-2" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Cấu hình</span></a>
+        <a href="#book-test-drive" class="side-nav-item" data-target="book-test-drive" aria-label="Lái thử"><i data-lucide="calendar-check" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Lái thử</span></a>
+        <a href="#showroom" class="side-nav-item" data-target="showroom" aria-label="Showroom"><i data-lucide="map-pin" class="w-4 h-4 pointer-events-none"></i><span class="side-nav-tooltip">Showroom</span></a>
+    </nav>
+
+    <!-- SECTION 1: HERO -->
+    <section id="hero" class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <video class="absolute top-0 left-0 w-full h-full object-cover z-0" autoplay loop muted playsinline>
+        <source src="https://pub-f3795acf9b6e410c8ed5b3a4ebf87360.r2.dev/vid/bmw.mp4" type="video/mp4">
+    </video>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#08080c] via-transparent to-black/70"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+            <p id="hero-sub" class="text-amber-400 uppercase tracking-[0.4em] text-xs font-semibold mb-4">The Pinnacle of Craftsmanship</p>
+            <h1 id="hero-title" class="text-5xl md:text-8xl font-black tracking-tight text-white mb-4 uppercase gold-gradient-text">
+                BMW X7 <span class="text-gray-400 font-light">2026</span>
+            </h1>
+            <p id="hero-desc" class="text-lg md:text-2xl text-gray-300 font-light tracking-widest mb-10 uppercase">
+                Luxury Beyond Limits
+            </p>
+            <div id="hero-cta" class="flex flex-col sm:flex-row gap-5">
+                <a href="#lineup" class="btn-white-luxury px-8 py-4 rounded-full tracking-widest uppercase text-xs font-bold transition duration-300">
+                    Khám phá
+                </a>
+                <a href="#book-test-drive" class="btn-glass px-8 py-4 rounded-full tracking-widest uppercase text-xs font-bold border border-white/20 transition duration-300">
+                    Lái thử ngay
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-gray-400 text-xs tracking-widest animate-bounce">
+            <span>SCROLL</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-amber-400"></i>
+        </div>
+    </section>
+
+    <!-- SECTION 2: BRAND SHOWCASE -->
+    <section class="py-24 border-y border-white/10 bg-black/40">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+            <div class="p-8 glass-card rounded-2xl">
+                <div class="text-5xl md:text-6xl font-black gold-gradient-text mb-2 counter" data-target="500">0</div>
+                <p class="text-xs uppercase tracking-widest text-gray-400 font-medium">Xe Tuyệt Bản Đã Giao</p>
+            </div>
+            <div class="p-8 glass-card rounded-2xl">
+                <div class="text-5xl md:text-6xl font-black gold-gradient-text mb-2 counter" data-target="10">0</div>
+                <p class="text-xs uppercase tracking-widest text-gray-400 font-medium">Năm Kinh Nghiệm Phục Vụ VIP</p>
+            </div>
+            <div class="p-8 glass-card rounded-2xl">
+                <div class="text-5xl md:text-6xl font-black gold-gradient-text mb-2 counter" data-target="98">0</div>
+                <p class="text-xs uppercase tracking-widest text-gray-400 font-medium">% Khách Hàng Tuyệt Đối Hài Lòng</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: INTERACTIVE VEHICLE LINEUP -->
+    <section id="lineup" class="py-28 px-6 max-w-7xl mx-auto">
+        <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3 text-center">Bộ Sưu Tập Siêu Xe</h2>
+        <h3 class="text-4xl md:text-5xl font-extrabold text-center mb-16 uppercase tracking-tight">Danh Sách Xe Tương Tác</h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Tabs/List -->
+            <div class="lg:col-span-4 flex flex-col gap-3">
+                <button onclick="selectCar('x5')" id="btn-x5" class="car-tab-btn active w-full text-left p-6 rounded-2xl glass-card border-l-4 border-amber-400 transition-all duration-300">
+                    <span class="text-2xl font-bold block">BMW X5</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Luxury SAV</span>
+                </button>
+                <button onclick="selectCar('x7')" id="btn-x7" class="car-tab-btn w-full text-left p-6 rounded-2xl glass-card border-l-4 border-transparent transition-all duration-300">
+                    <span class="text-2xl font-bold block">BMW X7</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Presidential SUV</span>
+                </button>
+                <button onclick="selectCar('m4')" id="btn-m4" class="car-tab-btn w-full text-left p-6 rounded-2xl glass-card border-l-4 border-transparent transition-all duration-300">
+                    <span class="text-2xl font-bold block">BMW M4 Competition</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">High Performance</span>
+                </button>
+                <button onclick="selectCar('xm')" id="btn-xm" class="car-tab-btn w-full text-left p-6 rounded-2xl glass-card border-l-4 border-transparent transition-all duration-300">
+                    <span class="text-2xl font-bold block">BMW XM</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest mt-1 block">Electrified Hyper-SUV</span>
+                </button>
+            </div>
+
+            <!-- Preview Card -->
+            <div class="lg:col-span-8 glass-card p-8 md:p-10 rounded-3xl relative overflow-hidden shadow-2xl" id="car-display-card">
+                <div class="relative h-64 md:h-80 w-full mb-6">
+                    <img id="lineup-img" src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000&auto=format&fit=crop" 
+                         class="w-full h-full object-contain transition-all duration-500" alt="Car Preview">
+                </div>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-t border-white/10 pt-6">
+                    <div>
+                        <h4 id="lineup-title" class="text-3xl font-black mb-4 uppercase">BMW X5</h4>
+                        <div class="flex gap-8 text-sm">
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Công suất</p>
+                                <p id="lineup-hp" class="text-2xl font-black gold-gradient-text">381 HP</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Mô-men xoắn</p>
+                                <p id="lineup-torque" class="text-2xl font-black gold-gradient-text">540 Nm</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">0-100 km/h</p>
+                                <p id="lineup-acc" class="text-2xl font-black gold-gradient-text">5.4s</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right w-full md:w-auto">
+                        <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Giá khởi điểm</p>
+                        <p id="lineup-price" class="text-2xl font-black text-white mb-4">Từ 3.800.000.000 VNĐ</p>
+                        <a href="configurator.html" class="inline-block btn-gold-glow text-black font-bold px-8 py-3 rounded-full text-xs uppercase tracking-widest transition">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: SCROLL STORYTELLING -->
+    <section id="story" class="py-28 px-6 max-w-7xl mx-auto">
+        <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3 text-center">BMW-Style Storytelling</h2>
+        <h3 class="text-4xl font-extrabold text-center mb-16 uppercase">Chi Tiết Đột Phá Thiết Kế & Động Cơ</h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 relative items-start">
+            <!-- Left: Scrolling Text Blocks -->
+            <div class="space-y-36 py-12">
+                <div class="story-block p-8 glass-card rounded-2xl" data-img="https://imgs.search.brave.com/T30a5DzX9PdevWzwB8ZpSM1twojCmf0PrOYUiF3oJ5k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ibXcu/c2NlbmU3LmNvbS9p/cy9pbWFnZS9CTVcv/ZzY1X2ljZV9mdXJ0/aGVyX3RvcGljc19z/ZXJ2aWNlLWh1Yjoz/dG8yP2ZtdD13ZWJw/JndpZD0yNTYwJmZp/dD13cmFwLCsx">
+                    <span class="text-amber-400 text-xs uppercase tracking-widest font-bold mb-2 block">01 / Ngoại Thất Động Học</span>
+                    <h4 class="text-3xl font-black mb-4">Đường Nét Khí Động Học Mới</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Thiết kế tỉ lệ vàng mang đậm tinh thần siêu xe, lưới tản nhiệt Kidney Grille phát sáng Iconic Glow độc bản tạo dấu ấn mạnh mẽ và uy lực vượt trội.
+                    </p>
+                </div>
+                <div class="story-block p-8 glass-card rounded-2xl" data-img="https://imgs.search.brave.com/lKFLiNr-iMN5EFkXxPXG_YvwQGXm5-ZNFuhAQfSYoro/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/Ym13YmxvZy5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjAv/MDMvQk1XLUxhc2Vy/LWxpZ2h0LWRldGFp/bC1vbi1HMTUtOC1T/ZXJpZXMtODMweDU1/My5qcGc">
+                    <span class="text-amber-400 text-xs uppercase tracking-widest font-bold mb-2 block">02 / Hệ Thống Chiếu Sáng</span>
+                    <h4 class="text-3xl font-black mb-4">Đèn Laser BMW Iconic Light</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Tầm chiếu xa lên đến 600m với khả năng tự động thích ứng thông minh, phân luồng ánh sáng chống chói chủ động cho xe ngược chiều.
+                    </p>
+                </div>
+                <div class="story-block p-8 glass-card rounded-2xl" data-img="https://imgs.search.brave.com/Pset9A8dL1P13EF4QcWnwelnz13ZO10ivXpZLc48TyM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hdXRv/YmlrZXMudm4vc3Rv/cmVzL25ld3NfZGF0/YWltYWdlcy9uZ3V5/ZW50aHV5LzA2MjAy/NS8yNS8xMS8wODAy/X0JNV19NM19Db21w/ZXRpdGlvbl94RHJp/dmVfMjMwNjI1XzMu/anBnP3J0PTIwMjUw/NjI1MTEwODQ5">
+                    <span class="text-amber-400 text-xs uppercase tracking-widest font-bold mb-2 block">03 / Khoang Cabin Hoàng Gia</span>
+                    <h4 class="text-3xl font-black mb-4">Nội Thất May Đo Thủ Công</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Da Merino cao cấp kết hợp ốp gỗ phủ bóng thủ công. Màn hình cong BMW Curved Display kết hợp hệ thống âm thanh vòm Bowers & Wilkins Diamond 20 loa.
+                    </p>
+                </div>
+                <div class="story-block p-8 glass-card rounded-2xl" data-img="https://imgs.search.brave.com/0lnChu8yAwCi86rZZ0oNYmSmmvs7Of8UejTCEXM34As/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMwLmNhcmJ1enpp/bWFnZXMuY29tL3dv/cmRwcmVzcy93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyNC8xMi8y/MDI1LWJtdy1tOC1n/cmFuLWNvdXBlLWVu/Z2luZS5qcGc_cT00/OSZmaXQ9Y29udGFp/biZ3PTc1MCZoPTQy/MiZkcHI9Mg">
+                    <span class="text-amber-400 text-xs uppercase tracking-widest font-bold mb-2 block">04 / Vận Hành Siêu Hạng</span>
+                    <h4 class="text-3xl font-black mb-4">Động Cơ TwinPower Turbo 4.4L V8</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Sức mạnh vượt trội kết hợp công nghệ Mild Hybrid 48V giúp tối ưu khả năng tăng tốc tức thì, phản hồi ga nhạy bén như siêu xe đua chuyên nghiệp.
+                    </p>
+                </div>
+                <div class="story-block p-8 glass-card rounded-2xl" data-img="https://imgs.search.brave.com/Lr5pOrmpq86_DGnaVIrxLpZAimTM9801TMP5pcfxP0g/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90YWR2/YW50YWdld2Vic2l0/ZXMtY29tLmNkbi1j/b252ZXJ0dXMuY29t/L3VwbG9hZHMvc2l0/ZXMvNDE3LzIwMjYv/MDQvd2hhdC1pcy1C/TVctZHJpdmVyLWFz/c2lzdGFuY2UtYW5k/LXdoeS1pdC1tYXR0/ZXJzLmpwZw">
+                    <span class="text-amber-400 text-xs uppercase tracking-widest font-bold mb-2 block">05 / Trí Tuệ Nhân Tạo & An Toàn</span>
+                    <h4 class="text-3xl font-black mb-4">Trợ Lái Bán Tự Động Cấp Độ 3</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Tích hợp 12 cảm biến siêu âm, Radar tầm xa và Camera 360° hỗ trợ tự động đỗ xe từ xa, di chuyển theo vệt bánh xe và phanh khẩn cấp thông minh.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Sticky Image Frame -->
+            <div class="lg:sticky lg:top-28 h-[450px] md:h-[550px] w-full rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl">
+                <img id="story-sticky-img" src="https://imgs.search.brave.com/T30a5DzX9PdevWzwB8ZpSM1twojCmf0PrOYUiF3oJ5k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ibXcu/c2NlbmU3LmNvbS9p/cy9pbWFnZS9CTVcv/ZzY1X2ljZV9mdXJ0/aGVyX3RvcGljc19z/ZXJ2aWNlLWh1Yjoz/dG8yP2ZtdD13ZWJw/JndpZD0yNTYwJmZp/dD13cmFwLCsx" 
+                     class="w-full h-full object-cover transition-all duration-700 ease-out" alt="Porsche Style Feature">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: 360° VIEWER / 3D MODEL -->
+    <section id="viewer360" class="py-24 bg-gray/60 border-y border-white/10">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3">Xoay Xe Trực Quan 3D</h2>
+            <h3 class="text-4xl font-extrabold mb-6 uppercase">360° Interactive 3D Experience</h3>
+            <p class="text-gray-400 text-xs tracking-widest uppercase mb-12">Kéo chuột hoặc vuốt để xoay và tương tác với mô hình 3D đa chiều</p>
+            <div class="flex flex-row justify-start md:justify-center overflow-x-auto gap-4 mb-8 pb-4 hide-scrollbar">
+                <button onclick="switch3DModel('x5')" id="btn-3d-x5" class="car-tab-btn px-8 py-3 rounded-full glass-card border border-amber-400 text-white font-bold text-sm whitespace-nowrap transition-all duration-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+                    BMW X5
+                </button>
+                <button onclick="switch3DModel('x7')" id="btn-3d-x7" class="car-tab-btn px-8 py-3 rounded-full glass-card border border-transparent text-gray-400 hover:text-white hover:border-white/30 text-sm whitespace-nowrap transition-all duration-300">
+                    BMW X7
+                </button>
+                <button onclick="switch3DModel('m4')" id="btn-3d-m4" class="car-tab-btn px-8 py-3 rounded-full glass-card border border-transparent text-gray-400 hover:text-white hover:border-white/30 text-sm whitespace-nowrap transition-all duration-300">
+                    BMW M4
+                </button>
+                <button onclick="switch3DModel('xm')" id="btn-3d-xm" class="car-tab-btn px-8 py-3 rounded-full glass-card border border-transparent text-gray-400 hover:text-white hover:border-white/30 text-sm whitespace-nowrap transition-all duration-300">
+                    BMW XM
+                </button>
+            </div>
+            <div id="viewer-container" class="relative w-full h-[450px] md:h-[600px] glass-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                
+                <!-- KHỐI MÔ HÌNH 3D INTERACTIVE -->
+                <model-viewer 
+                    id="main-3d-viewer"
+                    src="model/bmw_x5_2024.glb" 
+                    alt="BMW 3D Model"
+                    auto-rotate
+                    camera-controls
+                    touch-action="pan-y"
+                    shadow-intensity="1.5"
+                    shadow-softness="1"
+                    exposure="1.2"
+                    environment-image="neutral"
+                    class="w-full h-full bg-transparent cursor-grab active:cursor-grabbing">
+                </model-viewer>
+                
+                <!-- Bảng hướng dẫn nổi phía dưới -->
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-card px-6 py-2.5 rounded-full text-xs uppercase tracking-widest text-amber-400 flex items-center gap-3 border border-amber-500/30 pointer-events-none z-10">
+                    <i data-lucide="move-3d" class="w-4 h-4 animate-pulse"></i> Hold & Drag to Rotate 3D Model
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: COMPARE MODELS -->
+    <section id="compare" class="py-24 bg-black/50 border-y border-white/10">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3 text-center">So Sánh Thông Số</h2>
+            <h3 class="text-4xl font-extrabold text-center mb-16 uppercase">Bảng So Sánh Dòng Xe</h3>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[650px]">
+                    <thead>
+                        <tr class="border-b border-white/20 text-amber-400 text-xs uppercase tracking-widest">
+                            <th class="p-4">Thông số kỹ thuật</th>
+                            <th class="p-4 text-center text-xl font-black text-white">BMW X5</th>
+                            <th class="p-4 text-center text-xl font-black text-white">BMW X7</th>
+                            <th class="p-4 text-center text-xl font-black text-white">BMW XM</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/10 text-sm text-gray-300">
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="p-4 font-semibold text-gray-400">Công suất (Horsepower)</td>
+                            <td class="p-4 text-center font-bold">381 HP</td>
+                            <td class="p-4 text-center font-bold">530 HP</td>
+                            <td class="p-4 text-center font-bold text-amber-400">653 HP</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="p-4 font-semibold text-gray-400">Tăng tốc 0-100 km/h</td>
+                            <td class="p-4 text-center">5.4 Giây</td>
+                            <td class="p-4 text-center">4.7 Giây</td>
+                            <td class="p-4 text-center font-bold text-amber-400">3.8 Giây</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="p-4 font-semibold text-gray-400">Mô-men Xoắn Cực Đại</td>
+                            <td class="p-4 text-center">540 Nm</td>
+                            <td class="p-4 text-center">750 Nm</td>
+                            <td class="p-4 text-center font-bold text-amber-400">800 Nm</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="p-4 font-semibold text-gray-400">Hệ Thống Dẫn Động</td>
+                            <td class="p-4 text-center">xDrive 4WD</td>
+                            <td class="p-4 text-center">xDrive 4WD</td>
+                            <td class="p-4 text-center">M xDrive 4WD</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition">
+                            <td class="p-4 font-semibold text-gray-400">Giá Niêm Yết Dự Kiến</td>
+                            <td class="p-4 text-center font-bold text-white">3.800.000.000 đ</td>
+                            <td class="p-4 text-center font-bold text-white">5.200.000.000 đ</td>
+                            <td class="p-4 text-center font-bold gold-gradient-text text-lg">10.999.000.000 đ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- SECTION 7.5: CONFIGURATOR TEASER -->
+    <section id="configurator" class="py-24 px-6 max-w-7xl mx-auto text-center">
+        <div class="glass-card p-12 md:p-20 rounded-3xl relative overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-center">
+            <!-- Hình nền làm mờ tạo chiều sâu -->
+            <div class="absolute inset-0 z-0 opacity-20">
+                <img src="https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=2015&auto=format&fit=crop" class="w-full h-full object-cover" alt="BMW Configurator Background">
+            </div>
+            <!-- Lớp phủ gradient đen -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-0"></div>
+
+            <!-- Nội dung chính -->
+            <div class="relative z-10 max-w-2xl">
+                <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3">Cá Nhân Hóa Độc Bản</h2>
+                <h3 class="text-4xl md:text-5xl font-extrabold mb-6 uppercase text-white tracking-tight">Xây Dựng Cấu Hình Xe</h3>
+                <p class="text-gray-300 text-sm tracking-widest leading-relaxed mb-10 uppercase font-light">
+                    Tự do lựa chọn màu sơn ngoại thất, mâm xe thể thao và chất liệu da nội thất cao cấp để tạo nên chiếc BMW mang đậm dấu ấn cá nhân của riêng bạn.
+                </p>
+                <!-- Nút chuyển hướng sang configurator.html -->
+                <a href="configurator.html" class="inline-block btn-gold-glow text-black font-black px-10 py-4 rounded-full text-xs uppercase tracking-widest transition duration-300 shadow-xl">
+                    Tùy Chỉnh Cấu Hình
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- SECTION 8: BOOK TEST DRIVE -->
+    <section id="book-test-drive" class="py-28 px-6 max-w-4xl mx-auto">
+        <div class="glass-card p-10 md:p-14 rounded-3xl relative overflow-hidden border border-amber-500/30 shadow-2xl">
+            <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-2">Trải Nghiệm Độc Quyền</h2>
+            <h3 class="text-4xl font-extrabold mb-8 uppercase">Đăng Ký Lái Thử VIP</h3>
+
+            <form for="customer.txt" method="post" id="booking-form" onsubmit="handleBooking(event)" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-400 block mb-2 uppercase tracking-wider">Họ và Tên</label>
+                        <input type="text" required placeholder="Quý khách Nguyễn Văn A" class="form-input">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-400 block mb-2 uppercase tracking-wider">Số Điện Thoại</label>
+                        <input type="tel" required placeholder="0901 234 567" class="form-input">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-400 block mb-2 uppercase tracking-wider">Mẫu Xe Trải Nghiệm</label>
+                        <select class="form-input bg-black">
+                            <option>BMW X5 2026</option>
+                            <option>BMW X7 2026</option>
+                            <option>BMW M4 Competition</option>
+                            <option>BMW XM Electrified</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-400 block mb-2 uppercase tracking-wider">Ngày Dự Định</label>
+                        <input type="date" required class="form-input text-gray-300">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-400 block mb-2 uppercase tracking-wider">Showroom Lựa Chọn</label>
+                        <select class="form-input bg-black">
+                            <option>BMW TP. Hồ Chí Minh</option>
+                            <option>BMW Hà Nội</option>
+                            <option>BMW Đà Nẵng</option>
+                            <option>BMW Cần Thơ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="submitTestDrive()" type="submit" class="w-full btn-gold-glow text-black font-black py-4 rounded-xl text-xs uppercase tracking-widest transition duration-300 shadow-xl">
+                    Xác Nhận Đặt Lịch Lái Thử VIP
+                </button>
+            </form>
+
+            <div id="booking-success" class="hidden absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-center p-8">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="check" class="w-8 h-8"></i>
+                </div>
+                <h4 class="text-2xl font-bold mb-2">Đặt Lịch Thành Công!</h4>
+                <p class="text-gray-400 text-sm max-w-md">Chuyên viên tư vấn VIP từ BMW sẽ liên hệ trực tiếp xác nhận lịch trải nghiệm của quý khách trong thời gian sớm nhất.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: SHOWROOM LOCATOR -->
+    <section id="showroom" class="py-24 bg-black/60 border-t border-white/10">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-xs uppercase tracking-[0.4em] text-amber-400 font-bold mb-3 text-center">Mạng Lưới Showroom</h2>
+            <h3 class="text-4xl font-extrabold text-center mb-12 uppercase">Hệ Thống Đại Lý VIP Trên Toàn Quốc</h3>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button onclick="selectCity('hcm')" id="city-hcm" class="city-btn active glass-card p-4 rounded-xl text-center border-b-2 border-amber-400 font-bold text-xs uppercase tracking-wider">TP. Hồ Chí Minh</button>
+                <button onclick="selectCity('hn')" id="city-hn" class="city-btn glass-card p-4 rounded-xl text-center border-b-2 border-transparent font-bold text-xs uppercase tracking-wider text-gray-400">Hà Nội</button>
+                <button onclick="selectCity('dn')" id="city-dn" class="city-btn glass-card p-4 rounded-xl text-center border-b-2 border-transparent font-bold text-xs uppercase tracking-wider text-gray-400">Đà Nẵng</button>
+                <button onclick="selectCity('ct')" id="city-ct" class="city-btn glass-card p-4 rounded-xl text-center border-b-2 border-transparent font-bold text-xs uppercase tracking-wider text-gray-400">Cần Thơ</button>
+            </div>
+
+            <div class="glass-card p-8 md:p-10 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center border border-white/10">
+                <div>
+                    <h4 id="showroom-name" class="text-2xl font-bold mb-2">BMW Center TP.HCM</h4>
+                    <p id="showroom-address" class="text-gray-400 text-sm mb-4">80 Nguyễn Văn Linh, Phường Tân Phú, Quận 7, TP.HCM</p>
+                    <p id="showroom-phone" class="text-amber-400 text-sm font-semibold mb-6">Hotline VIP: 1900 6868</p>
+                    <a href="s.map" class="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-white hover:text-amber-400 transition">
+                        <i data-lucide="navigation" class="w-4 h-4 text-amber-400"></i> Dẫn đường qua Google Maps
+                    </a>
+                </div>
+                <div class="h-64 rounded-2xl overflow-hidden relative border border-white/10 bg-gray-900 flex items-center justify-center">
+                    <iframe
+                    id="showroom-map"
+                    width="100%"
+                    height="500"
+                    style="border:0;border-radius:20px;"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62715.82965215!2d106.6813683873875!3d10.754560121739656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f2a4cc6c589%3A0x2c1e75e03385fe4a!2zQk1XIFBIw5ogTeG7uCBIxq9ORw!5e0!3m2!1svi!2s!4v1787236033962!5m2!1svi!2s"
+                    
+                    allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-white/10 text-center text-xs text-gray-500">
+        <p class="mb-2">© 2026 BMW Vietnam - Styled for Ultra Luxury Performance</p>
+        <p>Tất cả thông số kĩ thuật mang tính chất tham khảo cho phiên bản năm 2026.</p>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
